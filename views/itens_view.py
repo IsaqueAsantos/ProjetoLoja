@@ -1,5 +1,4 @@
 import flet as ft
-
 from ui.theme import *
 from services.item_service import carregar_itens
 
@@ -10,6 +9,10 @@ TAG_COLORS = {
     "material": ft.Colors.GREEN_400,
     "outros": ft.Colors.GREY_700,
 }
+
+CARD_WIDTH = 190
+CARD_HEIGHT = 300
+
 
 class ItensView:
     def __init__(self, app):
@@ -22,7 +25,8 @@ class ItensView:
         tag_color = TAG_COLORS.get(categoria, PRIMARY)
 
         return ft.Container(
-            width=190,
+            width=CARD_WIDTH,
+            height=CARD_HEIGHT,
             padding=14,
             bgcolor=BG_CARD,
             border_radius=18,
@@ -39,8 +43,8 @@ class ItensView:
                             fit="cover",
                         ),
                     ),
-                    
-                    # ===== TÍTULO + TAG =====
+
+                    # ===== NOME + TAG =====
                     ft.Row(
                         alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                         controls=[
@@ -48,6 +52,8 @@ class ItensView:
                                 item["nome"],
                                 style=font_text(),
                                 weight=ft.FontWeight.BOLD,
+                                max_lines=2,
+                                overflow=ft.TextOverflow.ELLIPSIS,
                             ),
                             ft.Container(
                                 padding=ft.padding.symmetric(6, 10),
@@ -68,6 +74,8 @@ class ItensView:
                         size=12,
                         color=TEXT_MUTED,
                     ),
+
+                    ft.Container(height=6),
 
                     # ===== PREÇO + AÇÕES =====
                     ft.Row(
@@ -103,50 +111,32 @@ class ItensView:
                 ],
             ),
         )
-
+    
     def render(self):
         return ft.Container(
             expand=True,
             padding=20,
             bgcolor=BG_MAIN,
             content=ft.Column(
+                scroll=ft.ScrollMode.AUTO,
                 controls=[
                     # ===== HEADER =====
                     ft.Row(
-                        alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                         controls=[
-                            ft.Row(
-                                controls=[
-                                    ft.IconButton(
-                                        icon=ft.Icons.ARROW_BACK_ROUNDED,
-                                        icon_color=TEXT_SECONDARY,
-                                        bgcolor=BG_CARD,
-                                        width=42,
-                                        height=36,
-                                        style=ft.ButtonStyle(
-                                            shape=ft.RoundedRectangleBorder(radius=12)
-                                        ),
-                                        on_click=lambda e: self.app.show_view("HomeView"),
-                                    ),
-                                    ft.Text(
-                                        "Itens Cadastrados",
-                                        style=font_header(),
-                                    ),
-                                ],
-                            ),
-                            ft.ElevatedButton(
-                                on_click=lambda e: self.app.show_view("CadastrarItemView"),
+                            ft.IconButton(
+                                icon=ft.Icons.ARROW_BACK_ROUNDED,
+                                icon_color=TEXT_SECONDARY,
+                                bgcolor=BG_CARD,
+                                width=42,
+                                height=36,
                                 style=ft.ButtonStyle(
-                                    bgcolor={ft.ControlState.DEFAULT: PRIMARY},
-                                    shape=ft.RoundedRectangleBorder(radius=20),
+                                    shape=ft.RoundedRectangleBorder(radius=12)
                                 ),
-                                content=ft.Row(
-                                    spacing=6,
-                                    controls=[
-                                        ft.Icon(ft.Icons.ADD_ROUNDED),
-                                        ft.Text("Novo Item"),
-                                    ],
-                                ),
+                                on_click=lambda e: self.app.show_view("HomeView"),
+                            ),
+                            ft.Text(
+                                "Itens Cadastrados",
+                                style=font_header(),
                             ),
                         ],
                     ),
@@ -164,8 +154,9 @@ class ItensView:
 
                     ft.Container(height=20),
 
-                    # ===== GRID =====
+                    # ===== GRID FLEXÍVEL DE VERDADE =====
                     ft.Row(
+                        wrap=True,
                         spacing=20,
                         run_spacing=20,
                         controls=[self.card_item(item) for item in self.itens],
