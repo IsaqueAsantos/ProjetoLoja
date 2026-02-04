@@ -30,7 +30,7 @@ class HomeView:
                     primary_button(
                         text="Itens Cadastrados",
                         icon=ft.Icons.LIST_ALT,
-                        on_click=lambda e: self.app.show_view("PedidoView"),
+                        on_click=lambda e: self.app.show_view("ItensView"),
                     ),
                 ],
             ),

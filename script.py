@@ -3,6 +3,7 @@ import flet as ft
 from views.home_view import HomeView
 from views.pedido_view import PedidosView
 from views.novo_pedido_view import NovoPedidoView
+from views.itens_view import ItensView
 from ui.theme import BG_MAIN
 
 
@@ -23,6 +24,7 @@ class App:
             "HomeView": HomeView(self),
             "PedidosView": PedidosView(self),
             "NovoPedidoView": NovoPedidoView(self),
+            "ItensView": ItensView(self),
         }
 
         self.show_view("HomeView")

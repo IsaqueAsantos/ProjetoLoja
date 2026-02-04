@@ -95,7 +95,6 @@ class NovoPedidoView:
                                         ),
                                         width=180,
                                         height=44,
-                                        on_click=lambda e: print("Cadastrar item"),
                                         style=ft.ButtonStyle(
                                             bgcolor={
                                                 ft.ControlState.DEFAULT: PRIMARY,
