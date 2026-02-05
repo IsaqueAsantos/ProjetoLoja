@@ -154,7 +154,7 @@ class ItensView:
 
                     ft.Container(height=20),
 
-                    # ===== GRID FLEXÍVEL DE VERDADE =====
+                    # ===== GRID FLEXÍVEL =====
                     ft.Row(
                         wrap=True,
                         spacing=20,
