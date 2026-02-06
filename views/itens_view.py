@@ -1,18 +1,10 @@
 import flet as ft
 from ui.theme import *
 from services.item_service import carregar_itens
-
-TAG_COLORS = {
-    "cigarro": ft.Colors.RED_400,
-    "bebida": ft.Colors.BLUE_400,
-    "comida": ft.Colors.ORANGE_400,
-    "material": ft.Colors.GREEN_400,
-    "outros": ft.Colors.GREY_700,
-}
+from ui.tag_colors import get_tag_color
 
 CARD_WIDTH = 190
 CARD_HEIGHT = 300
-
 
 class ItensView:
     def __init__(self, app):
@@ -22,7 +14,7 @@ class ItensView:
     def card_item(self, item):
         valor_final = item["valor"] - item.get("desconto", 0)
         categoria = item.get("categoria", "").lower()
-        tag_color = TAG_COLORS.get(categoria, PRIMARY)
+        tag_color = get_tag_color(item.get("categoria"), PRIMARY)
 
         return ft.Container(
             width=CARD_WIDTH,
