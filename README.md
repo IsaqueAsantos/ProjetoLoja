@@ -1,4 +1,4 @@
-# 🧾 Projeto Zake  
+# 🧾 Projeto Loja
 ### Sistema Desktop de Pedidos e Gestão de Itens
 
 > Aplicação desktop desenvolvida em **Python + Tkinter**, focada em controle de pedidos, cadastro de produtos e fechamento de caixa, com interface moderna, modular e de fácil manutenção.
@@ -7,7 +7,7 @@
 
 ## ✨ Visão Geral
 
-O **Projeto Zake** é um sistema pensado para atender rotinas comuns de um ponto de venda (PDV), oferecendo:
+O **Projeto Loja** é um sistema pensado para atender rotinas comuns de um ponto de venda (PDV), oferecendo:
 
 - navegação simples e intuitiva  
 - organização visual consistente  
@@ -139,8 +139,8 @@ ProjetoZake/
 ├── views/
 │   ├── __init__.py
 │   ├── home_view.py
-│   ├── pedidos_view.py
-│   ├── novo_pedido.py
+│   ├── pedido_view.py
+│   ├── novo_pedido_view.py
 │   └── itens_view.py
 ├── data/
 │   └── itens.json
