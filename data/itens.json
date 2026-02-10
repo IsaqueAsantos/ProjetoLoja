@@ -12,7 +12,7 @@
     "nome": "Marlboro",
     "valor": 148.90,
     "desconto": 2.00,
-    "categoria": "Cigarro",
+    "categoria": "Nacional",
     "imagem": "assets/images/Marlboro.png"
   },
   {
@@ -38,5 +38,13 @@
     "desconto": 2.00,
     "categoria": "Outros",
     "imagem": "assets/images/Seda.png"
+  },
+  {
+    "id": 6,
+    "nome": "Eigth",
+    "valor": 45.00,
+    "desconto": 2.00,
+    "categoria": "Paraguai",
+    "imagem": "assets/images/eight.png"
   }
 ]
