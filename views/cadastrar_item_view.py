@@ -1,5 +1,6 @@
 import flet as ft
 from ui.theme import *
+from controllers.cadastrar_item_controller import CadastrarItemController
 
 # ===== HELPERS =====
 def Label(text):
@@ -30,20 +31,64 @@ def DropdownField(options):
 class CadastrarView:
     def __init__(self, app):
         self.app = app
+        self.controller = CadastrarItemController()
 
+        # ===== INPUTS CONTROLADOS =====
+        self.nome = Input(hint_text="Ex: Rothmans Blue Maço")
+        self.valor = Input(hint_text="R$ 0,00")
+        self.categoria = DropdownField([
+            "Bebida",
+            "Nacional",
+            "Paraguai",
+            "Comida",
+            "Material",
+            "Outros"
+        ])
+
+    # ===== SALVAR ITEM =====
+    def _save_item(self, e):
+        nome = self.nome.value
+        valor = self.valor.value.replace("R$", "").replace(",", ".")
+        categoria = self.categoria.value
+
+        valido, msg = self.controller.validar(nome, valor, categoria)
+
+        if not valido:
+            print(msg)
+            return
+
+        self.controller.salvar_item(
+            nome=nome,
+            valor=valor,
+            categoria=categoria,
+            imagem="assets/images/default.png"
+        )
+
+        print("Item cadastrado com sucesso!")
+
+        # limpar campos
+        self.nome.value = ""
+        self.valor.value = ""
+        self.categoria.value = None
+
+        self.app.page.update()
+
+        # voltar pra home
+        self.app.show_view("HomeView")
+
+    # ===== UI =====
     def render(self):
         return ft.Container(
             expand=True,
             bgcolor=BG_MAIN,
-            alignment=ft.alignment.Alignment(0, 0),  # centralização geral
+            alignment=ft.alignment.Alignment(0, 0),
             content=ft.Column(
                 expand=True,
-                alignment=ft.MainAxisAlignment.CENTER,  # centraliza vertical
+                alignment=ft.MainAxisAlignment.CENTER,
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 spacing=24,
                 controls=[
 
-                    # WRAPPER RESPONSIVO
                     ft.Container(
                         width=None,
                         alignment=ft.alignment.Alignment(0, 0),
@@ -74,11 +119,10 @@ class CadastrarView:
                                     ],
                                 ),
 
-                                # CARD CENTRALIZADO
+                                # CARD
                                 ft.Container(
                                     alignment=ft.alignment.Alignment(0, 0),
                                     content=ft.Container(
-                                        width=None,
                                         padding=24,
                                         border_radius=20,
                                         bgcolor=BG_CARD,
@@ -109,7 +153,6 @@ class CadastrarView:
                                                             style=ft.ButtonStyle(
                                                                 shape=ft.RoundedRectangleBorder(radius=16),
                                                             ),
-                                                            #on_click=self._upload_image,
                                                             content=ft.Row(
                                                                 spacing=8,
                                                                 controls=[
@@ -122,7 +165,7 @@ class CadastrarView:
                                                 ),
 
                                                 Label("Nome *"),
-                                                Input(hint_text="Ex: Rothmans Blue Maço"),
+                                                self.nome,
 
                                                 ft.Row(
                                                     spacing=12,
@@ -132,7 +175,7 @@ class CadastrarView:
                                                             width=140,
                                                             controls=[
                                                                 Label("Valor *"),
-                                                                Input(hint_text="R$ 0,00"),
+                                                                self.valor,
                                                             ],
                                                         ),
                                                         ft.Column(
@@ -140,14 +183,7 @@ class CadastrarView:
                                                             spacing=6,
                                                             controls=[
                                                                 Label("Categoria *"),
-                                                                DropdownField([
-                                                                    "Bebida",
-                                                                    "Nacional",
-                                                                    "Paraguai",
-                                                                    "Comida",
-                                                                    "Material",
-                                                                    "Outros"
-                                                                ]),
+                                                                self.categoria,
                                                             ],
                                                         ),
                                                     ],
@@ -160,7 +196,7 @@ class CadastrarView:
                                                     style=ft.ButtonStyle(
                                                         shape=ft.RoundedRectangleBorder(radius=18)
                                                     ),
-                                                    #on_click=self._save_item,
+                                                    on_click=self._save_item,
                                                     content=ft.Row(
                                                         alignment=ft.MainAxisAlignment.CENTER,
                                                         spacing=8,
