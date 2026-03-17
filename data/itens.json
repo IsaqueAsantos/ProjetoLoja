@@ -3,7 +3,6 @@
     "id": 1,
     "nome": "Coca-Cola Lata",
     "valor": 5.00,
-    "desconto": 0,
     "categoria": "Bebida",
     "imagem": "assets/images/coca.png"
   },
@@ -11,7 +10,6 @@
     "id": 2,
     "nome": "Marlboro",
     "valor": 148.90,
-    "desconto": 2.00,
     "categoria": "Nacional",
     "imagem": "assets/images/Marlboro.png"
   },
@@ -19,7 +17,6 @@
     "id": 3,
     "nome": "Fofura",
     "valor": 12.50,
-    "desconto": 2.00,
     "categoria": "Comida",
     "imagem": "assets/images/Fofura.png"
   },
@@ -27,7 +24,6 @@
     "id": 4,
     "nome": "Lapis de Cor",
     "valor": 9.00,
-    "desconto": 2.00,
     "categoria": "Material",
     "imagem": "assets/images/Lapis.png"
   },
@@ -35,7 +31,6 @@
     "id": 5,
     "nome": "Seda Zomo",
     "valor": 50.00,
-    "desconto": 2.00,
     "categoria": "Outros",
     "imagem": "assets/images/Seda.png"
   },
@@ -43,7 +38,6 @@
     "id": 6,
     "nome": "Eigth",
     "valor": 45.00,
-    "desconto": 2.00,
     "categoria": "Paraguai",
     "imagem": "assets/images/eight.png"
   }

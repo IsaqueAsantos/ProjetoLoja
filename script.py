@@ -34,8 +34,7 @@ class App:
         self.show_view("HomeView")
 
     def show_view(self, name: str):
-        view = self.views[name]
-        self.container.content = view.render() 
+        self.container.content = self.views[name].render()
         self.page.update()
 
 
