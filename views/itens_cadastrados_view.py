@@ -9,7 +9,6 @@ CARD_HEIGHT = 300
 class ItensView:
     def __init__(self, app):
         self.app = app
-        self.itens = carregar_itens()
 
     def card_item(self, item):
         valor_final = item["valor"] - item.get("desconto", 0)
@@ -105,6 +104,9 @@ class ItensView:
         )
     
     def render(self):
+
+        self.itens = carregar_itens() #carregar e atualizar os itens após cadastro
+
         return ft.Container(
             expand=True,
             padding=20,

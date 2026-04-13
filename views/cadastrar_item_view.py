@@ -1,4 +1,6 @@
 import flet as ft
+import tkinter as tk
+from tkinter import filedialog
 from ui.theme import *
 from controllers.cadastrar_item_controller import CadastrarItemController
 
@@ -32,66 +34,127 @@ class CadastrarView:
     def __init__(self, app):
         self.app = app
         self.controller = CadastrarItemController()
+        self._imagem_path = None
 
-        # ===== INPUTS CONTROLADOS =====
+        # ===== INPUTS =====
         self.nome = Input(hint_text="Ex: Rothmans Blue Maço")
         self.valor = Input(hint_text="R$ 0,00")
         self.categoria = DropdownField([
-            "Bebida",
-            "Nacional",
-            "Paraguai",
-            "Comida",
-            "Material",
-            "Outros"
+            "Bebida", "Nacional", "Paraguai",
+            "Comida", "Material", "Outros"
         ])
 
-    # ===== SALVAR ITEM =====
+        # ===== PREVIEW =====
+        self._preview_icon = ft.Icon(ft.Icons.IMAGE, color=TEXT_MUTED)
+
+        self._preview_img = ft.Image(
+            src="",
+            visible=False,
+            width=124,
+            height=124,
+            fit="cover",
+        )
+
+        self._preview_container = ft.Container(
+            width=124,
+            height=124,
+            border_radius=16,
+            bgcolor=BG_CARD_HOVER,
+            alignment=ft.Alignment(0, 0),
+            clip_behavior=ft.ClipBehavior.HARD_EDGE,
+            content=ft.Stack(
+                controls=[
+                    ft.Container(
+                        width=124,
+                        height=124,
+                        alignment=ft.Alignment(0, 0),
+                        content=self._preview_icon,
+                    ),
+                    self._preview_img,
+                ]
+            ),
+        )
+
+    # ===== ABRIR SELETOR DE ARQUIVO =====
+    def _pick_file(self, e):
+        # Janela tkinter invisível só para hospedar o filedialog
+        root = tk.Tk()
+        root.withdraw()
+        root.attributes("-topmost", True)
+
+        path = filedialog.askopenfilename(
+            title="Selecionar imagem",
+            filetypes=[("Imagens", "*.png *.jpg *.jpeg *.webp")]
+        )
+
+        root.destroy()
+
+        if not path:
+            return
+
+        self._imagem_path = path
+        self._preview_img.src = path
+        self._preview_img.visible = True
+        self._preview_icon.visible = False
+        self.app.page.update()
+
+    # ===== SALVAR =====
     def _save_item(self, e):
         nome = self.nome.value
-        valor = self.valor.value.replace("R$", "").replace(",", ".")
+        valor = self.valor.value.replace("R$", "").replace(",", ".").strip()
         categoria = self.categoria.value
 
         valido, msg = self.controller.validar(nome, valor, categoria)
-
         if not valido:
             print(msg)
             return
+
+        imagem_salva = (
+            self.controller.copiar_imagem(self._imagem_path)
+            if self._imagem_path
+            else "assets/images/default.png"
+        )
 
         self.controller.salvar_item(
             nome=nome,
             valor=valor,
             categoria=categoria,
-            imagem="assets/images/default.png"
+            imagem=imagem_salva,
         )
 
         print("Item cadastrado com sucesso!")
+        self._reset()
 
-        # limpar campos
+        # Recarrega a ItensView antes de navegar
+        itens_view = self.app.views.get("ItensView")
+        if itens_view:
+            itens_view.itens = itens_view.controller.carregar_itens() if hasattr(itens_view, 'controller') else [] 
+
+    # ===== RESET =====
+    def _reset(self):
         self.nome.value = ""
         self.valor.value = ""
         self.categoria.value = None
-
+        self._imagem_path = None
+        self._preview_img.src = ""
+        self._preview_img.visible = False
+        self._preview_icon.visible = True
         self.app.page.update()
-
-        # voltar pra home
-        self.app.show_view("HomeView")
 
     # ===== UI =====
     def render(self):
         return ft.Container(
             expand=True,
             bgcolor=BG_MAIN,
-            alignment=ft.alignment.Alignment(0, 0),
+            alignment=ft.Alignment(0, 0),
             content=ft.Column(
                 expand=True,
                 alignment=ft.MainAxisAlignment.CENTER,
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 spacing=24,
                 controls=[
-
                     ft.Container(
-                        width=None,
-                        alignment=ft.alignment.Alignment(0, 0),
+                        alignment=ft.Alignment(0, 0),
                         padding=ft.padding.symmetric(horizontal=16),
                         content=ft.Column(
                             width=350,
@@ -100,11 +163,10 @@ class CadastrarView:
 
                                 # HEADER
                                 ft.Row(
-                                    expand=True,
                                     vertical_alignment=ft.CrossAxisAlignment.CENTER,
                                     controls=[
                                         ft.IconButton(
-                                            icon=ft.Icons.ARROW_BACK_ROUNDED,
+                                            icon=ft.Icons.ARROW_BACK,
                                             icon_color=TEXT_SECONDARY,
                                             bgcolor=BG_CARD,
                                             width=42,
@@ -121,7 +183,7 @@ class CadastrarView:
 
                                 # CARD
                                 ft.Container(
-                                    alignment=ft.alignment.Alignment(0, 0),
+                                    alignment=ft.Alignment(0, 0),
                                     content=ft.Container(
                                         padding=24,
                                         border_radius=20,
@@ -135,17 +197,7 @@ class CadastrarView:
                                                 ft.Row(
                                                     spacing=12,
                                                     controls=[
-                                                        ft.Container(
-                                                            width=124,
-                                                            height=124,
-                                                            border_radius=16,
-                                                            bgcolor=BG_CARD_HOVER,
-                                                            alignment=ft.alignment.Alignment(0, 0),
-                                                            content=ft.Icon(
-                                                                ft.Icons.IMAGE,
-                                                                color=TEXT_MUTED
-                                                            ),
-                                                        ),
+                                                        self._preview_container,
                                                         ft.ElevatedButton(
                                                             height=124,
                                                             width=165,
@@ -153,6 +205,7 @@ class CadastrarView:
                                                             style=ft.ButtonStyle(
                                                                 shape=ft.RoundedRectangleBorder(radius=16),
                                                             ),
+                                                            on_click=self._pick_file,
                                                             content=ft.Row(
                                                                 spacing=8,
                                                                 controls=[

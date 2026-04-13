@@ -40,5 +40,12 @@
     "valor": 45.0,
     "categoria": "Paraguai",
     "imagem": "assets/images/eight.png"
+  },
+  {
+    "id": 7,
+    "nome": "CAMEL KRETK",
+    "valor": 16.0,
+    "categoria": "Nacional",
+    "imagem": "assets/images/itens/item_7.png"
   }
 ]
