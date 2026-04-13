@@ -3,7 +3,7 @@ import flet as ft
 from views.home_view import HomeView
 from views.pedido_view import PedidosView
 from views.novo_pedido_view import NovoPedidoView
-from views.itens_view import ItensView
+from views.itens_cadastrados_view import ItensView
 from views.atualizacao_view import AtualizacoesView
 from views.cadastrar_item_view import CadastrarView
 from ui.theme import BG_MAIN
